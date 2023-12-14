@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editable Table</title>
+
+  
+</head>
+<body>
+    <div id="root"></div>
+    <script
+    src="https://unpkg.com/react@17/umd/react.development.js"
+    crossorigin="anonymous"
+  ></script>
+
+  <script
+    src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"
+    crossorigin="anonymous"
+  ></script>
+
+  <script
+    src="https://unpkg.com/@babel/standalone/babel.min.js"
+    crossorigin="anonymous"
+  ></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+  <script type="text/babel">
+   let table_Data = JSON.parse(localStorage.getItem("table_Data")) || [
+    {
+      "id": 1,
+      "header": "Onboarding Call"
+    },
+    {
+      "id": 2,
+      "header": "Google Search Console Access"
+    },
+    {
+      "id": 3,
+      "header": "Google Analytics Access"
+    },
+    {
+      "id": 4,
+      "header": "Website Access"
+    },
+    {
+      "id": 5,
+      "header": "Technical Audit"
+    },
+    {
+      "id": 6,
+      "header": "Anchor Text And Semantic Analysis"
+    },
+    {
+      "id": 7,
+      "header": "Anchor Text / URL mapping"
+    },
+    {
+      "id": 8,
+      "header": "Google Data Studio Report + Local Reporting Suite"
+    },
+    {
+      "id": 9,
+      "header": "Site Levle Optimization "
+    },
+    {
+      "id": 10,
+      "header": "On Page Optimization"
+    },
+    {
+      "id": 11,
+      "header": "Content Creation"
+    },
+    {
+      "id": 12,
+      "header": "Content Publishing"
+    },
+    {
+      "id": 13,
+      "header": "Premium Press Release "
+    },
+    {
+      "id": 14,
+      "header": "Authority Niche Placements"
+    },
+    {
+      "id": 15,
+      "header": "Review Management"
+    },
+    {
+      "id": 16,
+      "header": "Index Links"
+    },
+    {
+      "id": 17,
+      "header": "video Recap"
+    }
+  ]
+
+ console.log(table_Data)
+
+
+  function EditableTable() {
+    const [data, setData] = React.useState(table_Data);
+
+
+    const handleInputChange = (currentInputValue, id) => {
+ 
+      let tempArr = [...data];
+     
+      tempArr = tempArr.map((ele)=>{
+        if(ele.id == id){
+        
+            return {...ele,header:currentInputValue}
+        }
+        else {
+            return ele;
+        }
+      })
+ 
+     setData(tempArr)
+     localStorage.setItem("table_Data",JSON.stringify(tempArr))
+    };
+
+   
+    
+ 
+
+
+
+    return (
+      <div>
+        <table border="1">
+          <thead>
+            <tr>
+              <th>Column</th>
+              <th>Edit</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map(({header,id}) => (
+                
+              <tr key={id}>
+           
+                <td>{header}</td>
+                <td>
+                  <input
+                    type="text"
+                    value={header}
+                    onChange={(e) => handleInputChange(e.target.value,id)}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+ 
+      </div>
+    );
+  }
+
+  ReactDOM.render(<EditableTable />, document.getElementById("root"));
+
+</script>
+</body>
+</html>

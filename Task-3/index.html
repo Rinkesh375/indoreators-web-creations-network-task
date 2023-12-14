@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Task-3 Fetch data and show on page</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <style>
+    body{
+        font-family: sans-serif;
+    }
+    .phone{
+        display: flex;
+        gap: 20px;
+        width: 100%;
+        justify-content: center;
+        margin-top: 20px;
+    }
+    .phone>input{
+        height: 20px;
+    }
+    .data{
+        text-align: center;
+    }
+    h1{
+        text-align: center;
+        margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script>
+    const fetchData = async (phoneNumber) => {
+        try {
+          const response = await fetch('https://chimpu.xyz/api/post.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ phonenumber: phoneNumber })
+          });
+
+          const data = await response.json();
+          return data;
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+    const { useState,useEffect } = React;
+
+    const App = () => {
+      const [phonenumber, setPhonenumber] = useState('');
+      const [response,setResponse]=useState("")
+
+      const handleInputChange = event => {
+        setPhonenumber(event.target.value);
+      };
+
+      const handleButtonClick = async() => {
+        let data=await fetchData(phonenumber)
+        setResponse(data)
+      };
+ 
+
+      const handleRefresh=()=>{
+        setResponse('')
+      }
+
+      return (
+        React.createElement('div', {className:"data"},
+          response.msg ? React.createElement('div',null,
+          React.createElement('h1',null,`${response.msg}`),
+          React.createElement('button',{
+            onClick: handleRefresh,
+            children: 'Refresh'
+          })
+          )
+          :
+          React.createElement('div',{className:'phone'},
+          React.createElement('input', {
+            type: 'text',
+            value: phonenumber,
+            placeholder:'Enter your phone number',
+            onChange: handleInputChange
+          }),
+          React.createElement('button', {
+            onClick: handleButtonClick,
+            children: 'GET DATA'
+          })
+         )
+        )
+      );
+    };
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(React.createElement(App));
+  </script>
+</body>
+</html>
